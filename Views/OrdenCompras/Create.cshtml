@@ -1,0 +1,91 @@
+﻿@model Ferreteria.Models.OrdenCompra
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>OrdenCompra</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CodOrdenCompra" class="control-label"></label>
+                <input asp-for="CodOrdenCompra" class="form-control" />
+                <span asp-validation-for="CodOrdenCompra" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaPedOrdCom" class="control-label"></label>
+                <input asp-for="FechaPedOrdCom" class="form-control" />
+                <span asp-validation-for="FechaPedOrdCom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaEntOrdCom" class="control-label"></label>
+                <input asp-for="FechaEntOrdCom" class="form-control" />
+                <span asp-validation-for="FechaEntOrdCom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProveedorId" class="control-label"></label>
+                <input type="text" id="Nit" name="Nit" class="form-control" readonly />
+                
+               
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreProveedor" class="control-label"></label>
+                <!--<select asp-for="ProveedorId" class="form-control" asp-items="ViewBag.ProveedorId"></select>-->
+                <select asp-for="ProveedorId" class="form-control" asp-items="ViewBag.ProveedorId">
+                    <option value="">Seleccione un proveedor</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+       
+    @{
+        var proveedoresJson = @Html.Raw(ViewBag.ProveedoresData);
+    }
+
+    <script>
+        var proveedores = @Html.Raw(ViewBag.ProveedoresData);
+        console.log(proveedores);  // Verifica que los datos de proveedores estén aquí
+
+        // Agregar el evento al elemento select
+        document.getElementById("ProveedorId").addEventListener("change", function () {
+            // Esta línea define la variable seleccionada aquí
+            var selectedProveedorId = this.value;
+
+            // Verifica si se está obteniendo correctamente el id seleccionado
+            console.log("Proveedor seleccionado: " + selectedProveedorId);
+
+            // Buscar el NIT correspondiente al proveedor seleccionado
+            var proveedorSeleccionado = proveedores.find(p => p.Id == parseInt(selectedProveedorId));
+
+            console.log("Proveedor seleccionado encontrado: ", proveedorSeleccionado);
+
+            if (proveedorSeleccionado) {
+                document.getElementById("Nit").value = proveedorSeleccionado.Nit;
+                console.log("NIT encontrado: " + proveedorSeleccionado.Nit);  // Verifica que se obtiene el NIT
+            } else {
+                document.getElementById("Nit").value = ""; // Limpia el campo si no hay coincidencias
+            }
+        });
+    </script>
+
+    
+}
